@@ -1,0 +1,23 @@
+
+with a1 as (   select f.film_id,f.title film_title ,c.name film_category
+			from film_category fc
+			join film f
+			on f.film_id =fc.film_id
+			join category c
+			on fc.category_id=c.category_id 
+			where c.name ='Animation' or c.name= 'Children' or c.name= 'Classics' or c.name= 'Comedy' or c.name= 'Family' or c.name='Music'
+	   ) ,
+     a2 as (   select r.rental_id ,i.film_id 
+		   from inventory i
+		   join rental r
+		   on r.inventory_id =i.inventory_id
+		
+          )
+
+select a1.film_title ,a1.film_category	, count(a2.rental_id ) as rental_count
+from a1
+join a2
+on a1.film_id=a2.film_id 
+group by 1,2
+order by 2,1 ;
+

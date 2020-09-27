@@ -1,0 +1,19 @@
+                       
+
+select  film_category ,
+        standard_quartile , 
+		count(*)
+from
+ 	(select f.film_id,f.title film_title ,c.name film_category , f.rental_duration rental_duration,
+   		ntile (4) over (order by f.rental_duration ) standard_quartile
+			
+			from film_category fc
+			join film f
+			on f.film_id =fc.film_id
+			join category c
+			on fc.category_id=c.category_id 
+			where c.name ='Animation' or c.name= 'Children' or c.name= 'Classics' or c.name= 'Comedy' or c.name= 'Family' or c.name='Music'
+	       )  a1
+group by 1,2			    
+order by 1 ,2
+ 

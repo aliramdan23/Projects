@@ -1,0 +1,21 @@
+with t1 as (select  r.rental_id  rental_id ,
+				c.store_id store_id,
+				date_part('month',r.rental_date) as rental_month ,
+				date_part('year',r.rental_date) as rental_year
+				from rental r
+				join customer c
+				on c.customer_id =r.customer_id			
+			 ) ,
+	t2 as ( select s.store_id store_id , ad.address_id
+		  	 from store s
+		 	  join address ad
+		 	  on ad.address_id =s.address_id
+				where s.store_id ='1' or s.store_id ='2'
+			)		
+select 	t1.rental_month ,t1.rental_year,t2.store_id ,count(t1.rental_id)  
+from t1
+join t2
+on t2.store_id=t1.store_id
+group by 1,2,3
+order by 2 ;
+

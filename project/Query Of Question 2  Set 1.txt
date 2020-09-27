@@ -1,0 +1,17 @@
+with a1 as ( select f.film_id,f.title film_title ,c.name film_category ,
+			f.rental_duration rental_duration
+			from film_category fc
+			join film f
+			on f.film_id =fc.film_id
+			join category c
+			on fc.category_id=c.category_id 
+			where c.name ='Animation' or c.name= 'Children' or c.name= 'Classics' or c.name= 'Comedy' or c.name= 'Family' or c.name='Music'
+	       ) 
+		    
+select a1.film_title ,a1.film_category , a1.rental_duration,
+	ntile (4) over (order by a1.rental_duration )  as standard_quartile ,
+	case when  ntile (4) over (order by a1.rental_duration ) =1 then 'first_quartile' 
+    	  when  ntile (4) over (order by a1.rental_duration ) =2 then 'second_quartile'
+    	  when  ntile (4) over (order by a1.rental_duration ) =3 then 'third_quartile'
+    	  else 'final_quartile' end as quarter_level 
+    from a1 
